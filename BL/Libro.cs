@@ -212,8 +212,8 @@ namespace BL
                         cmd.CommandText = query;
                         cmd.CommandType = System.Data.CommandType.StoredProcedure;
 
-                        SqlDataAdapter adapter = new SqlDataAdapter(cmd);
                         DataTable tablaLibro = new DataTable();
+                        SqlDataAdapter adapter = new SqlDataAdapter(cmd);
 
                         adapter.Fill(tablaLibro);
 
@@ -225,8 +225,104 @@ namespace BL
                             {
                                 ML.Libro libro = new ML.Libro();
 
-                                //cachar del DataRow al objeto Libro
+                                libro.IdLibro = (int)fila[0];
+                                libro.Nombre = fila[1].ToString();
+
+                                libro.Autor = new ML.Autor();
+                                libro.Autor.IdAutor = (int)fila[2];
+                                libro.Autor.Nombre = fila[3].ToString();
+
+                                libro.NumeroPaginas = (int)fila[4];
+                                libro.FechaPublicacion = fila[5].ToString();
+
+                                libro.Editorial = new ML.Editorial();
+                                libro.Editorial.IdEditorial = (int)fila[6];
+                                libro.Editorial.Nombre = fila[7].ToString();
+
+                                libro.Edicion = fila[8].ToString();
+
+                                libro.Genero = new ML.Genero();
+                                libro.Genero.IdGenero = (int)fila[9];
+                                libro.Genero.Nombre = fila[10].ToString();
+
+                                result.Objects.Add(libro);
                             }
+
+                            result.Correct = true;
+                        }
+                        else
+                        {
+                            result.Correct = false;
+                            result.Message = "No se encontraron registros.";
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                result.Correct = false;
+                result.Message = ex.Message;
+                result.Ex = ex;
+            }
+
+            return result;
+        }
+
+        public static ML.Result GetById(int idLibro)
+        {
+            ML.Result result = new ML.Result();
+
+            try
+            {
+                using (SqlConnection context = new SqlConnection(DL.Connection.GetConnection()))
+                {
+                    string query = "LibroGetById";
+
+                    context.Open();
+
+                    using (SqlCommand cmd = new SqlCommand())
+                    {
+                        cmd.Connection = context;
+                        cmd.CommandText = query;
+                        cmd.CommandType = System.Data.CommandType.StoredProcedure;
+
+                        SqlParameter parametro = new SqlParameter("IdLibro", System.Data.SqlDbType.Int);
+                        parametro.Value = idLibro;
+
+                        cmd.Parameters.Add(parametro);
+
+                        DataTable tablaLibro = new DataTable();
+                        SqlDataAdapter adapter = new SqlDataAdapter(cmd);
+
+                        adapter.Fill(tablaLibro);
+
+                        if (tablaLibro.Rows.Count >= 1)
+                        {
+                            DataRow fila = tablaLibro.Rows[0];
+
+                            ML.Libro libro = new ML.Libro();
+
+                            libro.IdLibro = (int)fila[0];
+                            libro.Nombre = fila[1].ToString();
+
+                            libro.Autor = new ML.Autor();
+                            libro.Autor.IdAutor = (int)fila[2];
+                            libro.Autor.Nombre = fila[3].ToString();
+
+                            libro.NumeroPaginas = (int)fila[4];
+                            libro.FechaPublicacion = fila[5].ToString();
+
+                            libro.Editorial = new ML.Editorial();
+                            libro.Editorial.IdEditorial = (int)fila[6];
+                            libro.Editorial.Nombre = fila[7].ToString();
+
+                            libro.Edicion = fila[8].ToString();
+
+                            libro.Genero = new ML.Genero();
+                            libro.Genero.IdGenero = (int)fila[9];
+                            libro.Genero.Nombre = fila[10].ToString();
+
+                            result.Object = libro;
 
                             result.Correct = true;
                         }

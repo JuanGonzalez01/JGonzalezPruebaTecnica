@@ -128,3 +128,25 @@ INNER JOIN Editorial ON Editorial.IdEditorial=Libro.IdEditorial
 INNER JOIN Genero ON Genero.IdGenero=Libro.IdGenero
 
 LibroGetAll
+
+CREATE PROCEDURE LibroGetById
+@IdLibro INT
+AS
+SELECT Libro.IdLibro,
+		Libro.Nombre,
+		Libro.IdAutor,
+		Autor.Nombre AS AutorNombre,
+		Libro.NumeroPaginas,
+		Libro.FechaPublicacion,
+		Libro.IdEditorial,
+		Editorial.Nombre AS EditorialNombre,
+		Libro.Edicion,
+		Libro.IdGenero,
+		Genero.Nombre AS GeneroNombre
+FROM Libro
+INNER JOIN Autor ON Autor.IdAutor=Libro.IdAutor
+INNER JOIN Editorial ON Editorial.IdEditorial=Libro.IdEditorial
+INNER JOIN Genero ON Genero.IdGenero=Libro.IdGenero
+WHERE Libro.IdLibro = @IdLibro
+
+LibroGetById 3

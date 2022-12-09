@@ -30,7 +30,7 @@ namespace PL
                         Libro.Update();
                         break;
                     case 3:
-                        //Libro.GetById();
+                        Libro.GetById();
                         break;
                     case 4:
                         Libro.GetAll();
@@ -39,6 +39,7 @@ namespace PL
                         Libro.Delete();
                         break;
                     default:
+                        Console.WriteLine("---- Opción inválida. Porfavor vuelva a intentar. ----");
                         break;
                 }
 
